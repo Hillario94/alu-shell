@@ -1,0 +1,7 @@
+#!/bin/bash
+W=$(echo "$WATER" | tr "water" "01234")
+S=$(echo "$STIR" | tr "stir" "0123")
+water_dec=$(echo "ibase=5; $W" | bc)
+stir_dec=$(echo "ibase=4; $S" | bc)
+sum=$(echo "$water_dec + $stir_dec" | bc)
+echo "obase=8; $sum" | bc | tr "01234567" "bestchol"

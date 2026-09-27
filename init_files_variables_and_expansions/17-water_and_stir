@@ -1,0 +1,23 @@
+#!/bin/bash
+WATER_DEC=0
+for (( i=0; i<${#WATER}; i++ )); do
+  c=${WATER:$i:1}
+  case $c in w)d=0;; a)d=1;; t)d=2;; e)d=3;; r)d=4;; esac
+  WATER_DEC=$((WATER_DEC*5 + d))
+done
+STIR_DEC=0
+for (( i=0; i<${#STIR}; i++ )); do
+  c=${STIR:$i:1}
+  case $c in s)d=0;; t)d=1;; i)d=2;; r)d=3;; .)d=4;; esac
+  STIR_DEC=$((STIR_DEC*5 + d))
+done
+TOT=$((WATER_DEC+STIR_DEC))
+CHARS="bestchol"
+RES=""
+if [ $TOT -eq 0 ]; then echo b; exit; fi
+while [ $TOT -gt 0 ]; do
+  REM=$((TOT%8))
+  RES="${CHARS:$REM:1}$RES"
+  TOT=$((TOT/8))
+done
+echo $RES
