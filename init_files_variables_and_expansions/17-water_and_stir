@@ -23,6 +23,9 @@ decode_value() {
     local i char digit
     for (( i=0; i<${#value}; i++ )); do
         char="${value:i:1}"
+        if [[ ! -v map_ref[$char] ]]; then
+            continue
+        fi
         digit=${map_ref[$char]}
         result=$(( result * base + digit ))
     done
