@@ -1,0 +1,61 @@
+#!/bin/bash
+
+build_map() {
+    local word="$1"
+    local -n map_ref=$2
+    local idx=0
+    local i char
+    for (( i=0; i<${#word}; i++ )); do
+        char="${word:i:1}"
+        if [[ ! -v map_ref[$char] ]]; then
+            map_ref[$char]=$idx
+            ((idx++))
+        fi
+    done
+    echo $idx
+}
+
+decode_value() {
+    local -n map_ref=$1
+    local base=$2
+    local value="$3"
+    local result=0
+    local i char digit
+    for (( i=0; i<${#value}; i++ )); do
+        char="${value:i:1}"
+        digit=${map_ref[$char]}
+        result=$(( result * base + digit ))
+    done
+    echo "$result"
+}
+
+encode_value() {
+    local word="$1"
+    local base=$2
+    local num=$3
+    local result=""
+    local digit
+    if (( num == 0 )); then
+        echo "${word:0:1}"
+        return
+    fi
+    while (( num > 0 )); do
+        digit=$(( num % base ))
+        result="${word:digit:1}${result}"
+        num=$(( num / base ))
+    done
+    echo "$result"
+}
+
+declare -A water_map
+water_base=$(build_map "water" water_map)
+
+declare -A stir_map
+stir_base=$(build_map "stir" stir_map)
+
+water_dec=$(decode_value water_map "$water_base" "$WATER")
+stir_dec=$(decode_value stir_map "$stir_base" "$STIR")
+
+sum=$(( water_dec + stir_dec ))
+
+encode_value "bestchol" 8 "$sum"
