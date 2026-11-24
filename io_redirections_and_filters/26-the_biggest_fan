@@ -1,3 +1,2 @@
 #!/bin/bash
-# Displays the 11 hosts or IP addresses that made the most requests (TSV on stdin)
-tail -n +2 | cut -f1 | sort | uniq -c | sort -rn | head -11 | awk '{print $2}'
+tail -n +2 | cut -f1 | sort | uniq -c | sort -k1,1nr -k2,2 | head -11 | cut -c9-
